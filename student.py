@@ -17,10 +17,8 @@ if r.status_code != 200:
     exit()
 print('Connection works!')
 
-invitationBase64 = input('Paste invite here: ')
-invitationBytes = base64.b64decode(invitationBase64)
-invitationStr = invitationBytes.decode('utf-8')
-invitation = json.loads(invitationStr)
+invitation = input('Paste invite here: ')
+invitation = json.loads(invitation)
 print(invitation)
 
 
