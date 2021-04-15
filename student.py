@@ -1,3 +1,4 @@
+import time
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import base64
@@ -62,3 +63,61 @@ details = requests.get(
 print('connection: ' + str(details.json()['result']))
 print('MyDID:    ' + str(details.json()['result']['MyDID']))
 print('TheirDID: ' + str(details.json()['result']['TheirDID']))
+
+
+
+print('Accept credential offer with request')
+
+offer_accepted = False
+
+while not offer_accepted:
+    print('fetch offers...')
+
+    r = requests.get(agent_url + '/issuecredential/actions', verify=False).json()
+
+    for offer in r['actions']:
+        print('credential offer: ' + str(offer))
+        piid = offer['PIID']
+
+        r_credofferaccept = requests.post(
+            agent_url +
+            '/issuecredential/' +
+            piid +
+            '/accept-offer',
+            verify=False).json()
+        print(r_credofferaccept)
+        offer_accepted = True
+
+    time.sleep(2)
+
+
+
+print('accept credential')
+
+cred_accepted = False
+
+while not cred_accepted:
+    print('fetch creds...')
+
+    r = requests.get(agent_url + '/issuecredential/actions', verify=False).json()
+
+    label = "demo-credentials18"
+    credlabel = {
+        "names": [
+            label
+        ]
+    }
+
+    for offer in r['actions']:
+        print('credential offer: ' + str(offer))
+        piid = offer['PIID']
+
+        r_credaccept = requests.post(
+            agent_url + '/issuecredential/' + piid + '/accept-credential',
+            json=credlabel,
+            verify=False).json()
+        print(r_credaccept)
+
+        cred_accepted = True
+
+    time.sleep(2)
