@@ -63,59 +63,63 @@ print('MyDID:    ' + str(details.json()['result']['MyDID']))
 print('TheirDID: ' + str(details.json()['result']['TheirDID']))
 
 
+while True:
 
-print('Accept credential offer with request')
+    print('Accept credential offer with request')
 
-offer_accepted = False
+    offer_accepted = False
 
-while not offer_accepted:
-    print('fetch offers...')
+    while not offer_accepted:
+        print('fetch offers...')
 
-    r = requests.get(agent_url + '/issuecredential/actions', verify=False).json()
+        r = requests.get(agent_url + '/issuecredential/actions', verify=False).json()
 
-    for offer in r['actions']:
-        print('credential offer: ' + str(offer))
-        piid = offer['PIID']
+        for offer in r['actions']:
+            print('credential offer: ' + str(offer))
+            piid = offer['PIID']
 
-        r_credofferaccept = requests.post(
-            agent_url +
-            '/issuecredential/' +
-            piid +
-            '/accept-offer',
-            verify=False).json()
-        print(r_credofferaccept)
-        offer_accepted = True
+            r_credofferaccept = requests.post(
+                agent_url +
+                '/issuecredential/' +
+                piid +
+                '/accept-offer',
+                verify=False).json()
+            print(r_credofferaccept)
+            offer_accepted = True
 
-    time.sleep(2)
+        time.sleep(2)
 
 
 
-print('accept credential')
+    print('accept credential')
 
-cred_accepted = False
+    cred_accepted = False
 
-while not cred_accepted:
-    print('fetch creds...')
+    while not cred_accepted:
+        print('fetch creds...')
 
-    r = requests.get(agent_url + '/issuecredential/actions', verify=False).json()
+        r = requests.get(agent_url + '/issuecredential/actions', verify=False).json()
 
-    label = "demo-credentials18"
-    credlabel = {
-        "names": [
-            label
-        ]
-    }
+        label = "demo-credentials18"
+        credlabel = {
+            "names": [
+                label
+            ]
+        }
 
-    for offer in r['actions']:
-        print('credential offer: ' + str(offer))
-        piid = offer['PIID']
+        for offer in r['actions']:
+            print('credential offer: ' + str(offer))
+            piid = offer['PIID']
 
-        r_credaccept = requests.post(
-            agent_url + '/issuecredential/' + piid + '/accept-credential',
-            json=credlabel,
-            verify=False).json()
-        print(r_credaccept)
+            r_credaccept = requests.post(
+                agent_url + '/issuecredential/' + piid + '/accept-credential',
+                json=credlabel,
+                verify=False).json()
+            print(r_credaccept)
 
-        cred_accepted = True
+            cred_accepted = True
 
-    time.sleep(2)
+        time.sleep(2)
+
+    offer_accepted = False
+    cred_accepted = False
